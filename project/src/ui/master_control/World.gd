@@ -22,7 +22,7 @@ var world: Spatial = null
 
 var debug_car: Spatial = null
 
-onready var cam_ctl: CamCtl = $Camera
+onready var cam_ctl: ControllableCamera = $Camera
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("debug_car_spawn"):
@@ -41,7 +41,7 @@ func _input(event: InputEvent) -> void:
 
 func _ready() -> void:
 	DebugCanvas.disabled = true
-	_setup_cams()
+#	_setup_cams()
 
 
 func _setup_cams() -> void:
