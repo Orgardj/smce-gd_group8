@@ -24,6 +24,7 @@ onready var _log: RichTextLabel = $Log
 onready var _button: Button = $Button
 onready var _request: HTTPRequest = $HTTPRequest
 
+
 var error: String = ""
 
 
