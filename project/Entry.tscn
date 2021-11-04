@@ -43,7 +43,10 @@ __meta__ = {
 
 [node name="Header" type="Label" parent="."]
 anchor_right = 1.0
-margin_bottom = 128.0
+margin_left = -1.0
+margin_top = -11.0
+margin_right = -1.0
+margin_bottom = 117.0
 text = "FAILED TO INTIALIZE SMCE"
 align = 1
 valign = 1
@@ -79,3 +82,6 @@ text = "Copy to clipboard"
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="HTTPRequest" type="HTTPRequest" parent="."]
+use_threads = true

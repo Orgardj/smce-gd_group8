@@ -42,6 +42,24 @@ static func copy_dir(path: String, to: String, base = null) -> bool:
 
 	return true
 
+static func user2abs(path: String) -> String:
+	if ! path.begins_with("user://"):
+		return path
+	
+	return OS.get_user_data_dir() + "/" + path.substr(7)
+	
+# Warning: expects system paths
+static func unzip(file: String, working_dir: String) -> bool:
+	if ! File.new().file_exists(file) || ! Directory.new().dir_exists(working_dir):
+		return false
+	
+	match OS.get_name():
+		"X11", "OSX":
+			return OS.execute("tar", ["-C", working_dir, "-zxvf", file], true) == 0
+		"Windows":
+			return OS.execute("powershell.exe", ["Expand-Archive", "-Path", file, "-DestinationPath", working_dir], true) == 0
+	
+	return false
 
 static func read_json_file(path):
 	var config = File.new()
