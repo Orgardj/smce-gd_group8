@@ -41,7 +41,7 @@ func _input(event: InputEvent) -> void:
 
 func _ready() -> void:
 	DebugCanvas.disabled = true
-	_setup_cams()
+#	_setup_cams()
 
 
 func _setup_cams() -> void:

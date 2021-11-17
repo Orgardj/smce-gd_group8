@@ -1,5 +1,5 @@
 #
-#  ControllableCamera.gd
+#  LockedCam.gd
 #  Copyright 2021 ItJustWorksTM
 #
 #  Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,7 +16,7 @@
 #
 
 
-extends Spatial
+extends BaseCam
 
 var rot_x = 0
 var rot_y = 0
@@ -31,29 +31,27 @@ func set_y_angle_limit(limit: float) -> void:
 	_y_angle_limit = range_lerp(limit, 0, 90, 0, PI/2)
 	y_angle_limit = y_angle_limit
 	_update_pos()
+	
+var _zoom = 5
 
-var _zoom = 9
-
+var basis: Basis
 var target: Spatial = null setget set_target, get_target
-func set_target(trgt: Spatial) -> void:	
-	if is_instance_valid(target):
-		target.queue_free()
-		target = null
-		set_process(false)
-	
-	if is_instance_valid(trgt):
-		target = Spatial.new()
-		trgt.add_child(target)
-		set_process(true)
-	
+
+func _init(cam: Spatial, target: Spatial).(cam):
+	set_target(target)
+	set_y_angle_limit(y_angle_limit)
+
+
+func set_target(trgt: Spatial) -> void:
+	target = trgt
 	_update_pos()
 
 
 func get_target():
-	return target.get_parent() if is_instance_valid(target) else null
+	return target if is_instance_valid(target) else null
 
 
-func _unhandled_input(event: InputEvent) -> void:
+func cam_unhandled_input(event: InputEvent) -> void:
 	if FocusOwner.has_focus():
 		return
 	
@@ -70,20 +68,14 @@ func _unhandled_input(event: InputEvent) -> void:
 func _update_pos():
 	rot_y = clamp(rot_y, _y_angle_limit, PI - _y_angle_limit)
 	if is_instance_valid(target):
-		target.transform.basis = Basis(Quat(Vector3(rot_y, rot_x, 0)))
+		basis = Basis(Quat(Vector3(rot_y, rot_x, 0)))
 
 
-func _ready():
-	set_y_angle_limit(y_angle_limit)
-	_update_pos()
-
-
-func _process(delta: float) -> void:
+func cam_transform() -> Transform:
 	if ! is_instance_valid(target):
-		set_process(false)
-		return
-	global_transform.origin = target.global_transform.origin + target.global_transform.basis.xform((Vector3.UP) * _zoom)
-	look_at(target.global_transform.origin, Vector3.UP)
-
-
-
+		return cam.global_transform
+	# Find the destination - target's position + the offset
+	var target_pos: Vector3 = target.global_transform.origin + (target.global_transform.basis * basis).xform((Vector3.UP) * _zoom)
+	var new_transform: Transform = Transform(cam.transform.basis, target_pos)
+	cam.look_at(target.global_transform.origin, Vector3.UP)
+	return new_transform

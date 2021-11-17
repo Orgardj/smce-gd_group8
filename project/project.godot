@@ -24,6 +24,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/utilities/toggleable_bgroup/BButtonGroup.gd"
 }, {
+"base": "Reference",
+"class": "BaseCam",
+"language": "GDScript",
+"path": "res://src/utilities/camera/camera/BaseCam.gd"
+}, {
 "base": "Node",
 "class": "Board",
 "language": "NativeScript",
@@ -44,10 +49,10 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/attachments/BrushedMotor.gd"
 }, {
-"base": "Node",
+"base": "Camera",
 "class": "CamCtl",
 "language": "GDScript",
-"path": "res://src/utilities/controllable_camera/CamController.gd"
+"path": "res://src/utilities/camera/CamController.gd"
 }, {
 "base": "Reference",
 "class": "ControlUtil",
@@ -173,6 +178,7 @@ _global_script_class_icons={
 "AnalogRaycast": "",
 "AnyTask": "",
 "BButtonGroup": "",
+"BaseCam": "",
 "Board": "",
 "BoardConfig": "",
 "BoardView": "",
