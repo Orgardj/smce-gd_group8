@@ -28,7 +28,7 @@ Packaging is done using _CPack_.
 _note: we bundle the shared lib of SMCE on export_
 
 ### Running
-
+* For Windows OS: Copy SMCE.dll from \build to \project\gdnative\lib
 * `godot --path project/`
 * Or open up the project folder in the _Godot editor_ and start from there.
 
