@@ -146,23 +146,34 @@ margin_bottom = 32.0
 alignment = 2
 
 [node name="Compile" type="Button" parent="SketchSlot/VBoxContainer2/HBoxContainer/HBoxContainer"]
-margin_left = 1158.0
-margin_right = 1229.0
+margin_left = 1136.0
+margin_right = 1199.0
 margin_bottom = 32.0
 mouse_default_cursor_shape = 2
 theme = ExtResource( 4 )
-text = "  Compile  "
+text = " Compile "
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="SketchEditor" type="Button" parent="SketchSlot/VBoxContainer2/HBoxContainer/HBoxContainer"]
+margin_left = 1203.0
+margin_right = 1237.0
+margin_bottom = 32.0
+mouse_default_cursor_shape = 2
+theme = ExtResource( 4 )
+text = " Edit "
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="CompileLog" type="Button" parent="SketchSlot/VBoxContainer2/HBoxContainer/HBoxContainer"]
-margin_left = 1233.0
+margin_left = 1241.0
 margin_right = 1272.0
 margin_bottom = 32.0
 mouse_default_cursor_shape = 2
 theme = ExtResource( 4 )
-text = "  Log  "
+text = " Log "
 __meta__ = {
 "_edit_use_anchors_": false
 }
