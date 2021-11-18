@@ -27,6 +27,7 @@ var _toolchain: Toolchain = null
 var _board = null
 
 onready var compile_btn: Button = $SketchSlot/VBoxContainer2/HBoxContainer/HBoxContainer/Compile
+onready var sketch_editor: Button = $SketchSlot/VBoxContainer2/HBoxContainer/HBoxContainer/SketchEditor
 onready var compile_log_btn: Button = $SketchSlot/VBoxContainer2/HBoxContainer/HBoxContainer/CompileLog
 onready var sketch_status: Label = $SketchSlot/VBoxContainer2/VBoxContainer/SketchStatus
 
@@ -110,6 +111,7 @@ func _ready():
 	_board.connect("log", self, "_on_board_log")
 	
 	compile_btn.connect("pressed", self, "_on_compile")
+	sketch_editor.connect("pressed", self, "_show_sketch_editor")
 	compile_log_btn.connect("pressed", self, "_show_compile_log")
 	
 	close_btn.connect("pressed", self, "_on_close")
@@ -235,6 +237,12 @@ func _on_board_log(part: String):
 func _on_compile() -> void:
 	if ! _toolchain.compile(_board.get_sketch()):
 		_create_notification("Failed to start compilation", 5)
+
+func _show_sketch_editor() -> void:
+	var sketch_window = preload("res://src/ui/sketch_editor/SketchEditor.tscn").instance()
+	sketch_window.sketch_path = sketch_path
+	get_tree().root.add_child(sketch_window)
+
 
 
 func _on_close() -> void:
