@@ -24,7 +24,6 @@ onready var _log: RichTextLabel = $Log
 onready var _button: Button = $Button
 onready var _request: HTTPRequest = $HTTPRequest
 
-
 var error: String = ""
 
 
@@ -33,14 +32,27 @@ func _ready():
 	print("OS: ", OS.get_name())
 	print("Data dir: ", OS.get_user_data_dir())
 
-	#var cmake_exec = yield(_download_cmake(), "completed")
-	var cmake_exec = _download_cmake()
-	if ! cmake_exec:
-		return _error("Failed to retrieve cmake")
+	var CmakePath = []
+	OS.execute("powershell.exe", ["cmake", "--version"], true,CmakePath)
+	var Cmake_ver = CmakePath.front().split("\n")[0].split(" ")[2]
+	
+	if (Cmake_ver > "99.99.99"): # Exception when cmake does not exist is a text which is compared to be greater than a numberical string value (alphabetical order)
+		print("CMake does not exist, downloading ver 3.19.6 ...")
+		var cmake_exec = _download_cmake()
+		if ! cmake_exec:
+			return _error("Failed to retrieve cmake")
+		else:
+			print(cmake_exec)
+	elif (Cmake_ver < "3.16.0"):
+		print("CMake version outdated, downloading ver 3.19.6 ...")
+		var cmake_exec = _download_cmake()
+		if ! cmake_exec:
+			return _error("Failed to retrieve cmake")
+		else:
+			print(cmake_exec)
 	else:
-		print(cmake_exec)
-	
-	
+		print("CMake version %s exists in path, moving on ..." %Cmake_ver)
+			
 	var custom_dir = OS.get_environment("SMCEGD_USER_DIR")
 	if custom_dir != "":
 		print("Custom user directory set")
@@ -97,6 +109,8 @@ func _ready():
 	# somehow destroys res://
 	ModManager.load_mods()
 	
+
+	
 	_continue()
 
 func _continue():
@@ -131,7 +145,7 @@ func _download_cmake():
 	var da = osi.get(OS.get_name())
 	var file: String = da[0]
 	var file_path: String = "user://%s" % file
-	print(file_path)
+	print("file",file_path)
 	
 	if ! File.new().file_exists(file_path):
 		print("Starting CMake download")
@@ -146,18 +160,30 @@ func _download_cmake():
 		else:
 			return null
 	else:
-		print("CMake already downloaded")
+		print("CMake already downloaded!")
+	#if ! Util.unzip(Util.user2abs(file_path), OS.get_user_data_dir()):
+	#	print("Null")
+	#	return null
 	
-	if ! Util.unzip(Util.user2abs(file_path), OS.get_user_data_dir()):
-		return null
-	
-	var cmake_exec = OS.get_user_data_dir() + da[1]
-	
-	# Generates error - how to solve ?
-	var cmake_EnvVar = OS.get_user_data_dir() + da[2]
 	var output = []
-	OS.execute("powershell.exe",["$env:Path", "+=", cmake_EnvVar], true, output)
+	#OS.execute("powershell.exe", array, true,output)
+	#OS.execute("powershell.exe", ["Expand-Archive", "-Path", "D:/SEP/cmake-3.19.6-win32-x86.zip", "-DestinationPath", "D:/SEP"], true,output)
 	print(output)
+
+	#var EnvVar = OS.get_environment("Path")
+	#print(EnvVar)
+	#EnvVar = EnvVar.split(";",false)
+	#var Temp = Array(EnvVar)
+	#print(Temp)
+	#print(Temp.find("D:\SEP\cmake-3.19.6-win32-x86\cmake-3.19.6-win32-x86\bin"))
+
+	var cmake_exec = OS.get_user_data_dir() + da[1]
+	print(cmake_exec)
+	
+	#var cmake_EnvVar = OS.get_user_data_dir() + da[2]
+	#output = []
+	#OS.execute("powershell.exe",["$env:Path", "+=", "D:/SEP/cmake-3.19.6-win32-x86/bin"], true, output)
+	#print(output)
 	
 	var cmake_ver = []
 	var cmake_res = OS.execute(cmake_exec, ["--version"], true, cmake_ver)
